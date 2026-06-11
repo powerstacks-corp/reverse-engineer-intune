@@ -141,9 +141,15 @@ give you. State in the writeup which tier you used.
   operation (e.g. force a sync), stop, and export to CSV. Built-in `pktmon` / `netsh
   trace` are free fallbacks for network-layer questions.
 - **Tier 3, decompilation (ilspycmd, free):** when the answer is in the IME's own code.
-  `dotnet tool install -g ilspycmd` (needs the free .NET SDK), then decompile the
-  specific SideCar assembly/type and explain the relevant method. This is the deepest
-  "rudy" move; use it to confirm a hypothesis about why the code behaves as observed.
+  Run `scripts/Invoke-ImeDecompile.ps1` to decompile a SideCar assembly to C# (it
+  installs the free, MIT-licensed ilspycmd automatically; it needs the free .NET SDK
+  present and tells you the one-line install if it is missing). Pick the assembly from
+  the bundle's `ime-version.txt`, or pass `-Type <fully.qualified.Name>` for one type,
+  then grep the output for the method or constant you are testing (`OnSessionChange`,
+  a timer value like `28800000`, `RemoveExistingProducts`) and quote it. This is the
+  deepest "rudy" move. Use it to PROVE a code-level claim you could otherwise only infer
+  from logs, for example that a delay is a hardcoded interval, or that the check-in
+  timestamp is written before the per-command processing rather than after it.
 
 ## Output
 
