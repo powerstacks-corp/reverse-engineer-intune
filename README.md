@@ -29,6 +29,8 @@ On an Intune-managed Windows device, in an elevated Claude Code session:
 
     go rudy this last check-in
 
+A colon after "this" is fine too: `go rudy this: last check-in`.
+
 Claude runs the collector, analyzes the bundle, and writes the post.
 
 ## Scope
