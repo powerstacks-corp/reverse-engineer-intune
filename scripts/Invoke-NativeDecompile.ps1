@@ -89,7 +89,7 @@ $projDir = Join-Path $OutputPath 'ghidra-proj'
 New-Item -ItemType Directory -Path $projDir -Force | Out-Null
 $outCs = Join-Path $OutputPath ("{0}.c" -f [IO.Path]::GetFileNameWithoutExtension($binPath))
 
-$postScript = Join-Path $PSScriptRoot 'ghidra\ExportDecompiled.py'
+$postScript = Join-Path $PSScriptRoot 'ghidra\ExportDecompiled.java'
 if (-not (Test-Path $postScript)) { throw "Post-script not found: $postScript" }
 $scriptDir = Split-Path $postScript
 $scriptName = Split-Path $postScript -Leaf

@@ -197,7 +197,12 @@ give you. State in the writeup which tier you used.
   hundred MB). Finding the right code: without Microsoft symbols, functions are named
   `FUN_*`, so anchor on STRINGS. Pass `-StringFilter "<text>"` with a known log message,
   registry value name, or CSP node path the function would reference, and the export keeps
-  only functions that touch that string. Read and quote the pseudo-C, but say plainly that
+  only functions that touch that string. Two anchors survive even without symbols and are
+  worth grepping the output for: Microsoft's own internal source-file paths, baked in as
+  assert strings (for example `onecoreuap\admin\dm\omadm\omadmclient\lib\src\syncmlsession.cpp`),
+  which map a function back to its real source module, and named imported helpers (for
+  example `OmaDmGetAcctInfo`), which name the operation a `FUN_*` caller is performing.
+  Read and quote the pseudo-C, but say plainly that
   native decompilation is lossier than .NET, so Tier 4 conclusions carry more uncertainty
   than Tier 3 unless the functions came back named.
 
