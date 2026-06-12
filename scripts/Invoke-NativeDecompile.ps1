@@ -17,26 +17,33 @@
 
 .PARAMETER FunctionFilter
     Optional case-insensitive substring. Only functions whose name contains it are exported.
-    Most useful once Microsoft symbols name the functions; without symbols, names are FUN_*.
+    Microsoft symbols load by default, so functions are named (StoreServerLastTime); this is
+    the primary way to isolate the code you want, for example -FunctionFilter "ServerLast".
 
 .PARAMETER StringFilter
     Optional case-insensitive substring. Only functions that reference a defined string
-    containing this text are exported. Use this to anchor on a known log message, registry
-    value name, or CSP node path when symbols are absent. This is the workhorse filter for
-    finding the right code in an unsymbolized binary.
+    containing this text are exported. Anchor on a known log message, registry value name, or
+    CSP node path. This is the fallback for the rare binary with no public PDB, where the
+    functions come back as FUN_* and you have no names to filter on.
+
+.PARAMETER NoSymbols
+    Skip the Microsoft symbol download (offline runs, or msdl unreachable). Functions then
+    come back as FUN_*; use -StringFilter to find the right code.
 
 .PARAMETER OutputPath
     Folder for the decompiled C and the Ghidra log. Defaults to a timestamped %TEMP% folder.
 
 .NOTES
     Free tooling only: Ghidra (NSA, Apache-2.0) and a JDK. Heavier than the .NET tier; the
-    first run downloads Ghidra (a few hundred MB) and analysis can take several minutes.
+    first run downloads Ghidra (a few hundred MB), and the first run per binary downloads its
+    PDB from the Microsoft symbol server (cached locally). Analysis can take several minutes.
 #>
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)] [string]$Binary,
     [string]$FunctionFilter,
     [string]$StringFilter,
+    [switch]$NoSymbols,
     [string]$OutputPath = (Join-Path $env:TEMP ("NativeDecompiled_" + (Get-Date -Format 'yyyyMMdd_HHmmss')))
 )
 
@@ -94,10 +101,23 @@ if (-not (Test-Path $postScript)) { throw "Post-script not found: $postScript" }
 $scriptDir = Split-Path $postScript
 $scriptName = Split-Path $postScript -Leaf
 
+# Microsoft public symbols: configured by a pre-script so native functions come back named
+# (StoreServerLastTime) instead of FUN_*. On by default; -NoSymbols skips it (offline runs).
+$preArgs = @()
+if (-not $NoSymbols) {
+    $symbolCache = Join-Path $cache 'symbols'
+    New-Item -ItemType Directory -Path $symbolCache -Force | Out-Null
+    $preArgs = @('-preScript', 'EnableMsSymbols.java', $symbolCache)
+    Write-Step "Symbols: ON. First run for a given binary downloads its PDB from msdl.microsoft.com (cached under $symbolCache)."
+} else {
+    Write-Step "Symbols: OFF (-NoSymbols). Functions will be FUN_*; anchor with -StringFilter."
+}
+
 $headlessArgs = @(
     $projDir, 'rudyproj',
     '-import', $binPath,
-    '-scriptPath', $scriptDir,
+    '-scriptPath', $scriptDir
+) + $preArgs + @(
     '-postScript', $scriptName, $outCs
 )
 if ($FunctionFilter) { $headlessArgs += $FunctionFilter } elseif ($StringFilter) { $headlessArgs += '' }

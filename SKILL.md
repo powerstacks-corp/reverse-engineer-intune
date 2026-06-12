@@ -194,17 +194,21 @@ give you. State in the writeup which tier you used.
   installs a free JDK and Ghidra if missing, runs Ghidra's headless analyzer, and writes the
   decompiled pseudo-C. This is the heaviest, slowest tier and the genuine last resort: reach
   for it only when Tiers 1 to 3 cannot answer, and the first run downloads Ghidra (a few
-  hundred MB). Finding the right code: without Microsoft symbols, functions are named
-  `FUN_*`, so anchor on STRINGS. Pass `-StringFilter "<text>"` with a known log message,
-  registry value name, or CSP node path the function would reference, and the export keeps
-  only functions that touch that string. Two anchors survive even without symbols and are
-  worth grepping the output for: Microsoft's own internal source-file paths, baked in as
-  assert strings (for example `onecoreuap\admin\dm\omadm\omadmclient\lib\src\syncmlsession.cpp`),
-  which map a function back to its real source module, and named imported helpers (for
-  example `OmaDmGetAcctInfo`), which name the operation a `FUN_*` caller is performing.
-  Read and quote the pseudo-C, but say plainly that
-  native decompilation is lossier than .NET, so Tier 4 conclusions carry more uncertainty
-  than Tier 3 unless the functions came back named.
+  hundred MB). Microsoft public symbols load by default: the helper points Ghidra at the
+  Microsoft symbol server, downloads the binary's PDB, and applies it during analysis, so
+  functions come back with their real names (for example
+  `Microsoft::Windows::MDM::OmadmClient::OmadmAccountManager::StoreServerLastTime`, with typed
+  parameters), not `FUN_*`. This is what lets you read it like source and name the exact
+  mechanism the way Rudy does. Finding the right code: grep the output for the function name
+  you expect (`StoreServerLastTime`, `StoreServerLastAccessTime`) or pass `-FunctionFilter
+  "<name substring>"` to export only matching functions. You can still pass `-StringFilter
+  "<text>"` to anchor on a known log message, registry value, or CSP node path, which is the
+  fallback when a binary has no public PDB (functions are then `FUN_*`); in that case also
+  grep for Microsoft's internal source-file paths baked in as assert strings (for example
+  `onecoreuap\admin\dm\omadm\omadmclient\lib\src\syncmlsession.cpp`). `-NoSymbols` skips the
+  symbol download for offline runs. Read and quote the pseudo-C, but say plainly that native
+  decompilation is lossier than .NET, so Tier 4 conclusions still carry some uncertainty even
+  with names.
 
 ## Output
 
