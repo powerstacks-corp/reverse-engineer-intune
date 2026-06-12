@@ -44,7 +44,7 @@ tiers. That is your job, not theirs.
 
 - **Escalate tiers yourself.** Run Tier 1 first. The moment the log and registry evidence
   leaves the actual mechanism unproven, escalate on your own (Tier 2 to watch it happen
-  live, Tier 3 to read the IME's .NET code) rather than stopping at a plausible guess or
+  live, Tier 3 to read the IME's .NET code, Tier 4 to read native OS code) rather than stopping at a plausible guess or
   waiting to be asked. Going deep is the default when the lighter tier cannot close it.
 - **Pick your own targets.** You do not need the user to tell you what to decompile or
   capture. The IME logs name the components involved (grep them for the manager, handler,
@@ -179,7 +179,20 @@ give you. State in the writeup which tier you used.
   Windows OS components (the OMA-DM client `omadmclient.exe`, `dmenrollengine.dll`, the CSP
   handlers, where Last Check-in and policy processing actually live) are native C++ and
   cannot be decompiled this way. If a question lands there, say so plainly rather than
-  forcing it. That is a native-decompiler job, not this one.
+  forcing it. That is a native-decompiler job, which is Tier 4.
+- **Tier 4, native decompilation (Ghidra, free):** for the native OS code Tier 3 cannot
+  read, the OMA-DM client `omadmclient.exe`, `dmenrollengine.dll`, the CSP handlers, where
+  Last Check-in, enrollment, and policy/CSP processing actually live. Run
+  `scripts/Invoke-NativeDecompile.ps1 -Binary <name>` (for example `omadmclient.exe`). It
+  installs a free JDK and Ghidra if missing, runs Ghidra's headless analyzer, and writes the
+  decompiled pseudo-C. This is the heaviest, slowest tier and the genuine last resort: reach
+  for it only when Tiers 1 to 3 cannot answer, and the first run downloads Ghidra (a few
+  hundred MB). Finding the right code: without Microsoft symbols, functions are named
+  `FUN_*`, so anchor on STRINGS. Pass `-StringFilter "<text>"` with a known log message,
+  registry value name, or CSP node path the function would reference, and the export keeps
+  only functions that touch that string. Read and quote the pseudo-C, but say plainly that
+  native decompilation is lossier than .NET, so Tier 4 conclusions carry more uncertainty
+  than Tier 3 unless the functions came back named.
 
 ## Output
 
