@@ -33,7 +33,14 @@ under "Output" below.
 - Never bundle or redistribute Sysinternals binaries (their license forbids it).
   Acquire Procmon from the official source at run time, or ask the user to place it.
 - Everything this skill drives is free: built-in Windows tooling, Sysinternals (free to
-  use), and `ilspycmd` (MIT). Keep it that way so the skill stays publicly usable.
+  use), `ilspycmd` (MIT), and Ghidra (Apache-2.0). Keep it that way so the skill stays
+  publicly usable.
+- Most steps run as a normal user. Tier 1's deepest capture and Tier 2's Procmon need
+  administrator rights, and the first .NET SDK or JDK install may prompt for elevation.
+  Tell the user up front when a step needs elevation rather than letting it fail silently.
+- Tier 4 is heavy: Ghidra plus a JDK is roughly 1 GB, and the first run downloads a few
+  hundred MB. Warn the user before you kick it off, and only reach for it when the lighter
+  tiers cannot answer.
 
 ## Working from a plain symptom
 
