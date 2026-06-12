@@ -170,7 +170,12 @@ give you. State in the writeup which tier you used.
   are testing (`OnSessionChange`, a timer like `28800000`, the install or launch path) and
   quote the real C#. Use it to PROVE a code-level claim you could otherwise only infer, for
   example that a script delay is a hardcoded interval, or how the SideCar launches an
-  installer into the machine session. **Limit: ilspycmd reads .NET only.** The native
+  installer into the machine session. **Once you are in the code, extract all the proof it
+  offers.** Prove every code-level claim in your analysis from the source you already
+  decompiled, not just the one that prompted the escalation. If a mechanism has more than
+  one code-backed part (say, a hardcoded timer AND the `OnSessionChange` handler that gates
+  it on user logon), quote each from source, rather than proving one from code and leaving
+  its sibling as log or registry inference when the same assembly can settle both. **Limit: ilspycmd reads .NET only.** The native
   Windows OS components (the OMA-DM client `omadmclient.exe`, `dmenrollengine.dll`, the CSP
   handlers, where Last Check-in and policy processing actually live) are native C++ and
   cannot be decompiled this way. If a question lands there, say so plainly rather than
