@@ -191,6 +191,29 @@ mechanism-first, no filler. Structure:
 - **Conclusion + how to reproduce:** steps to reproduce on a lab device.
 - **Open questions:** anything you could not prove.
 
+**Screenshot placeholders.** Rudy's posts lean on screenshots, and you cannot take them
+yourself (the Intune portal, Registry Editor, Event Viewer, ILSpy, and Procmon are GUI
+surfaces you have no eyes on). So mark where each one belongs and tell the reader exactly
+how to capture it, using the specifics you already hold. At each spot insert a blockquote:
+
+```
+> [SCREENSHOT] caption: what it shows and why it matters here
+> Capture: the exact tool, the path or query or filter, and what to highlight
+```
+
+Be precise, because you know the exact evidence. For example:
+
+- > Capture: Registry Editor, go to HKLM\SOFTWARE\Microsoft\Enrollments\{ID}, screenshot the RenewErrorCode value.
+- > Capture: Event Viewer, Applications and Services Logs > Microsoft > Windows > DeviceManagement-Enterprise-Diagnostics-Provider > Operational, filter to Event ID 265, screenshot the session rows and their times.
+- > Capture: Intune portal, Apps > the app > Device install status, screenshot the row reporting 0x80070002.
+- > Capture: open the decompiled .cs that Invoke-ImeDecompile.ps1 produced, screenshot the method showing the 28800000 timer.
+
+For command-line evidence, give the exact command to run and screenshot (for example, run
+Get-ChildItem on Cert:\LocalMachine\My filtered to the Intune MDM issuer and screenshot the
+NotAfter and HasPrivateKey columns). Place a screenshot only where a visual genuinely earns
+it, the contradiction, the smoking-gun log line, the key registry value, the decompiled
+method, not on every paragraph.
+
 Match the user's writing guidance for any public-facing prose (no em-dashes, avoid
 AI-writing tells). Do not invent log lines or values; if you did not capture a signal,
 say so and drop to a lower-confidence statement or escalate a tier.
