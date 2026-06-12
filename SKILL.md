@@ -35,6 +35,27 @@ under "Output" below.
 - Everything this skill drives is free: built-in Windows tooling, Sysinternals (free to
   use), and `ilspycmd` (MIT). Keep it that way so the skill stays publicly usable.
 
+## Working from a plain symptom
+
+The user describes a symptom in plain language ("go rudy this: my PowerShell script takes
+hours to run", "go rudy this: an app shows failed but it is actually installed"). You drive
+everything from there. Do not make the user name files, assemblies, registry keys, or
+tiers. That is your job, not theirs.
+
+- **Escalate tiers yourself.** Run Tier 1 first. The moment the log and registry evidence
+  leaves the actual mechanism unproven, escalate on your own (Tier 2 to watch it happen
+  live, Tier 3 to read the IME's .NET code) rather than stopping at a plausible guess or
+  waiting to be asked. Going deep is the default when the lighter tier cannot close it.
+- **Pick your own targets.** You do not need the user to tell you what to decompile or
+  capture. The IME logs name the components involved (grep them for the manager, handler,
+  and class names they mention), and the evidence map points at the subsystem. From those,
+  choose which assembly to decompile and what term to grep for. Example: a script-timing
+  question points at the SideCar script workload, so you decompile the SideCar agent
+  assembly and grep its C# for the timer constant and the session-change handler, without
+  being told to.
+- **Say what you did.** In the writeup, name the tier you reached and why the lighter tiers
+  could not answer. The user's prompt stays simple; your method stays explicit.
+
 ## Method
 
 Work like an investigator, not a log dumper. For every run:
@@ -140,16 +161,20 @@ give you. State in the writeup which tier you used.
   `IntuneManagementExtension.exe`, `AgentExecutor`, `msiexec`, `powershell`, trigger the
   operation (e.g. force a sync), stop, and export to CSV. Built-in `pktmon` / `netsh
   trace` are free fallbacks for network-layer questions.
-- **Tier 3, decompilation (ilspycmd, free):** when the answer is in the IME's own code.
-  Run `scripts/Invoke-ImeDecompile.ps1` to decompile a SideCar assembly to C# (it
-  installs the free, MIT-licensed ilspycmd automatically; it needs the free .NET SDK
-  present and tells you the one-line install if it is missing). Pick the assembly from
-  the bundle's `ime-version.txt`, or pass `-Type <fully.qualified.Name>` for one type,
-  then grep the output for the method or constant you are testing (`OnSessionChange`,
-  a timer value like `28800000`, `RemoveExistingProducts`) and quote it. This is the
-  deepest "rudy" move. Use it to PROVE a code-level claim you could otherwise only infer
-  from logs, for example that a delay is a hardcoded interval, or that the check-in
-  timestamp is written before the per-command processing rather than after it.
+- **Tier 3, decompilation (ilspycmd, free, .NET only):** when the answer is in the IME's
+  own MANAGED code. Run `scripts/Invoke-ImeDecompile.ps1` to decompile a SideCar assembly
+  to C# (it installs the free, MIT-licensed ilspycmd automatically; it needs the free .NET
+  SDK present and tells you the one-line install if it is missing). Choose the assembly
+  yourself from the bundle's `ime-version.txt` and the class names the logs reference, or
+  pass `-Type <fully.qualified.Name>`, then grep the output for the method or constant you
+  are testing (`OnSessionChange`, a timer like `28800000`, the install or launch path) and
+  quote the real C#. Use it to PROVE a code-level claim you could otherwise only infer, for
+  example that a script delay is a hardcoded interval, or how the SideCar launches an
+  installer into the machine session. **Limit: ilspycmd reads .NET only.** The native
+  Windows OS components (the OMA-DM client `omadmclient.exe`, `dmenrollengine.dll`, the CSP
+  handlers, where Last Check-in and policy processing actually live) are native C++ and
+  cannot be decompiled this way. If a question lands there, say so plainly rather than
+  forcing it. That is a native-decompiler job, not this one.
 
 ## Output
 
