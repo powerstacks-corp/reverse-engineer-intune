@@ -460,7 +460,10 @@ reverse-engineer-intune/
     ghidra/
       EnableMsSymbols.java              Tier 4 pre-script: register the Microsoft public symbol server (trusted) + local cache
       ExportDecompiled.java             Tier 4 post-script: decompile matching functions to C, with name/string filters
+  examples/                             sanitized sample output the skill produced on a lab device
+    last-check-in-analysis.md           why a fresh "Last Check-in" can be a lie (Tier 1)
+    stuck-app-install-analysis.md       an app reported "file not found" that was really Cisco Secure Endpoint (Tier 1+)
 ```
 
-See `SKILL.md` for the authoritative method, the full set of techniques, and the output
-specification.
+See [examples/](examples/) for full sample output, and `SKILL.md` for the authoritative
+method, the full set of techniques, and the output specification.
