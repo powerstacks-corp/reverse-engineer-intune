@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Tier-1 forensic collector for the "Reverse Engineer Intune" (go rudy this) skill.
+    Tier-1 forensic collector for the "Advanced Intune Troubleshooting" (go rudy this) skill.
 
 .DESCRIPTION
     Takes a read-only snapshot of the Intune evidence this device leaves behind and
@@ -55,7 +55,7 @@ function Write-Step {
 $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
 $isAdmin  = ([Security.Principal.WindowsPrincipal]$identity).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 $isSystem = $identity.User.Value -eq 'S-1-5-18'
-Write-Step ("Reverse Engineer Intune forensic collector. Admin={0} System={1}" -f $isAdmin, $isSystem)
+Write-Step ("Advanced Intune Troubleshooting forensic collector. Admin={0} System={1}" -f $isAdmin, $isSystem)
 Write-Step ("Bundle: {0}" -f $OutputPath)
 if (-not $isAdmin -and -not $isSystem) {
     Write-Step "Not elevated. Some IME logs, HKLM hives, and certificate private-key data may be inaccessible." 'WARN'
@@ -227,7 +227,7 @@ try {
     }
 
     $sb = New-Object System.Text.StringBuilder
-    [void]$sb.AppendLine('# Reverse Engineer Intune - forensic bundle')
+    [void]$sb.AppendLine('# Advanced Intune Troubleshooting - forensic bundle')
     [void]$sb.AppendLine('')
     [void]$sb.AppendLine('Read this first, then dig into the files referenced below.')
     [void]$sb.AppendLine('')

@@ -1,6 +1,6 @@
 # The Install That Never Was: How Intune Turns 0xC0000142 Into "File Not Found"
 
-> _Real output from the Reverse Engineer Intune skill, lightly sanitized: the device name, tenant, GUIDs, certificate thumbprint, and user names have been replaced with placeholders. The technical findings are unchanged._
+> _Real output from the Advanced Intune Troubleshooting skill, lightly sanitized: the device name, tenant, GUIDs, certificate thumbprint, and user names have been replaced with placeholders. The technical findings are unchanged._
 
 ## TL;DR
 

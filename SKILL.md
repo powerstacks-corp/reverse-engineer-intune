@@ -1,17 +1,17 @@
 ---
-name: reverse-engineer-intune
+name: intune-advanced-troubleshooting
 description: >
-  Reverse-engineer what Microsoft Intune actually does on a managed Windows device
+  Investigate what Microsoft Intune actually does on a managed Windows device
   and write up the findings as a Rudy-Ooms-style investigative blog post. Trigger with
   "go rudy this <scenario>" or "go rudy this: <scenario>", "rudy <scenario>", or
-  "reverse engineer intune <scenario>".
+  "troubleshoot intune <scenario>".
   Collects Intune Management Extension logs, registry, scheduled tasks, services, and
   certificates (Tier 1, no extra tools), and optionally a filtered Procmon trace
   (Tier 2) or a decompiled IME assembly (Tier 3), then explains the real mechanism and
   any gap between what Intune reports and what is actually happening on the box.
 ---
 
-# Reverse Engineer Intune ("go rudy this")
+# Advanced Intune Troubleshooting ("go rudy this")
 
 Investigate how a specific Intune operation works on a managed Windows device, the way
 Rudy Ooms does on call4cloud.nl and the Patch My PC blog: read the evidence the device
@@ -19,7 +19,7 @@ leaves behind, find the gap between what Intune *reports* and what *actually hap
 explain the underlying mechanism, and write it up as a blog post.
 
 The user invokes this by saying "go rudy this <scenario>" (a colon after "this" is
-fine too, "go rudy this: <scenario>"), "rudy <scenario>", or "reverse engineer intune
+fine too, "go rudy this: <scenario>"), "rudy <scenario>", or "troubleshoot intune
 <scenario>". The deliverable is a markdown post in the investigative style described
 under "Output" below.
 

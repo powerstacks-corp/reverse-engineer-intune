@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Tier 3 (decompilation) helper for the Reverse Engineer Intune skill. Decompiles the
+    Tier 3 (decompilation) helper for the Advanced Intune Troubleshooting skill. Decompiles the
     Intune Management Extension SideCar assemblies to C# so the analysis can read the
     actual code: hardcoded timers, session handlers, install paths. The deepest "rudy"
     move, used to PROVE a code-level claim you could otherwise only infer from logs.

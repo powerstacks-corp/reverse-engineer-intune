@@ -1,7 +1,7 @@
-# Reverse Engineer Intune ("go rudy this")
+# Advanced Intune Troubleshooting ("go rudy this")
 
 A Claude Code skill that investigates what Microsoft Intune *actually* does on a managed
-Windows device, in the spirit of how Rudy Ooms reverse-engineers Intune internals on
+Windows device, in the spirit of how Rudy Ooms digs into Intune internals on
 call4cloud.nl and the Patch My PC blog, and writes the findings up as an investigative
 blog post.
 
@@ -15,7 +15,7 @@ finished markdown writeup.
 go rudy this last check-in
 go rudy this: my PowerShell script takes hours to run
 rudy an app shows failed but it is actually installed
-reverse engineer intune why required apps install late
+troubleshoot intune why required apps install late
 ```
 
 A colon after "this" is fine (`go rudy this: <scenario>`). All four trigger forms do the
@@ -450,7 +450,7 @@ Check-in / expired-MDM-certificate scenario.
 ## Repository layout
 
 ```
-reverse-engineer-intune/
+intune-advanced-troubleshooting/
   SKILL.md                              the skill definition (full method, tiers, techniques, output spec)
   README.md                             this file
   scripts/

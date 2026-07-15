@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Tier 4 (native decompilation) helper for the Reverse Engineer Intune skill. Decompiles
+    Tier 4 (native decompilation) helper for the Advanced Intune Troubleshooting skill. Decompiles
     native Windows OS binaries to pseudo-C with Ghidra, for the OS-level Intune internals
     that ilspycmd (Tier 3, .NET only) cannot read: the OMA-DM client, dmenrollengine, and
     the CSP handlers, where Last Check-in, enrollment, and policy/CSP processing live.
